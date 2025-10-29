@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: image-compress-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./uploads:/app/uploads     # supaya folder upload tersimpan di host
+      - ./logs:/app/logs           # optional: untuk log
+    restart: unless-stopped
