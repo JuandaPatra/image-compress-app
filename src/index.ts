@@ -47,6 +47,7 @@ app.post("/compress", upload.single("image"), async (req, res) => {
     await sharp(inputPath)
       .jpeg({ quality: 70 }) // kompres JPEG
       .png({ quality: 70 }) // kompres PNG
+      .webp({ quality: 70 }) // kompres WEBP
       .toFile(outputPath);
 
     // Kirim hasilnya ke client
