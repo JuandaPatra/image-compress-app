@@ -3,10 +3,12 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
+import cors from "cors";
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+app.use(cors());
 
 // Folder sementara untuk upload
 const uploadDir = path.join(__dirname, "../uploads");
@@ -51,7 +53,7 @@ app.post("/compress", upload.single("image"), async (req, res) => {
       .toFile(outputPath);
 
     // Kirim hasilnya ke client
-    res.download(outputPath, (err) => {
+    res.download(outputPath, `compressed-${req.file.originalname}`, (err) => {
       // Setelah file dikirim, hapus file sementara
       fs.unlinkSync(inputPath);
       fs.unlinkSync(outputPath);
