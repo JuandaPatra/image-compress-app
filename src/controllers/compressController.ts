@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import  { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
@@ -29,3 +29,7 @@ export const compress = async (req: Request, res: Response) => {
     res.status(500).send("Image compression failed.");
   }
 };
+
+export const compressMulti = async (req:Request, res: Response)=>{
+  res.status(200).send('masuk');
+}
