@@ -8,7 +8,10 @@ import cors from "cors";
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*", 
+  exposedHeaders: ["X-Filename"], 
+}));
 
 // Folder sementara untuk upload
 const uploadDir = path.join(__dirname, "../uploads");
@@ -51,6 +54,8 @@ app.post("/compress", upload.single("image"), async (req, res) => {
       .png({ quality: 70 }) // kompres PNG
       .webp({ quality: 70 }) // kompres WEBP
       .toFile(outputPath);
+
+    res.setHeader("X-Filename",  `compressed-${req.file.filename}`);
 
     // Kirim hasilnya ke client
     res.download(outputPath, `compressed-${req.file.originalname}`, (err) => {
