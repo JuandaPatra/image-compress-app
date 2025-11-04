@@ -31,4 +31,8 @@ const upload = multer({
   },
 });
 
-export const uploadSingle = upload.single("image");
+// export const uploadSingle = upload.single("image");
+export const uploadImages = upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "images", maxCount: 10 },
+]);

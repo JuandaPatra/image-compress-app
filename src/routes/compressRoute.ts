@@ -1,11 +1,10 @@
 import express from "express";
-import { compress, compressMulti } from "../controllers/compressController";
+import { compress } from "../controllers/compressController";
 
-import { uploadSingle} from '../middlewares/multerConfig'
+import { uploadImages} from '../middlewares/multerConfig'
 
 const router = express.Router();
 
-router.post("/compress", uploadSingle, compress);
-router.post("/compress-multi-image",compressMulti)
+router.post("/compress", uploadImages, compress);
 
 export default router;
