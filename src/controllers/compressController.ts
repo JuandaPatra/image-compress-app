@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import sharp from "sharp";
 import archiver from "archiver";
+import { cleanUpUtils } from "../utils/cleanup";
 
 export const compress = async (req: Request, res: Response) => {
    if (!req.files || Object.keys(req.files).length === 0) {
@@ -36,9 +37,9 @@ export const compress = async (req: Request, res: Response) => {
 
     const cleanUp = () => {
       // Hapus file upload original
-      uploadedFiles.forEach((f) => fs.existsSync(f) && fs.unlinkSync(f));
+      cleanUpUtils(uploadedFiles);
       // Hapus file compressed
-      compressedFiles.forEach((f) => fs.existsSync(f) && fs.unlinkSync(f));
+      cleanUpUtils(compressedFiles);
     };
 
     // Jika hanya satu file
