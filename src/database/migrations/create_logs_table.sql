@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS compress_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  original_size INTEGER NOT NULL,
+  compressed_size INTEGER NOT NULL,
+  duration_ms INTEGER NOT NULL,
+  ip_address TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

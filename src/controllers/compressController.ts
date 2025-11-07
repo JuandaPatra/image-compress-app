@@ -1,12 +1,13 @@
-import  { Request, Response } from "express";
+import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import sharp from "sharp";
 import archiver from "archiver";
 import { cleanUpUtils } from "../utils/cleanup";
+import { insertLog } from "../models/compressLogModel";
 
 export const compress = async (req: Request, res: Response) => {
-   if (!req.files || Object.keys(req.files).length === 0) {
+  if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send("No files uploaded.");
   }
 
@@ -14,14 +15,20 @@ export const compress = async (req: Request, res: Response) => {
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  
+   
   const compressedFiles: string[] = [];
   const uploadedFiles: string[] = [];
+
+  const startTime = Date.now();
 
   try {
     // Kompres semua file
     for (const key in files) {
       const fileArray = files[key];
       for (const file of fileArray) {
+        const inputPath = file.path;
+        const originalSize = fs.statSync(inputPath).size; 
         uploadedFiles.push(file.path); // simpan untuk dihapus nanti
 
         const outputPath = path.join(outputDir, `compressed-${file.filename}`);
@@ -30,6 +37,16 @@ export const compress = async (req: Request, res: Response) => {
           .png({ quality: 70 })
           .webp({ quality: 70 })
           .toFile(outputPath);
+
+        const compressedSize = fs.statSync(outputPath).size;
+        const duration = Date.now() - startTime;
+
+        const ip =
+          req.headers["x-forwarded-for"]?.toString().split(",")[0] ||
+          req.socket.remoteAddress ||
+          "unknown";
+
+            await insertLog(originalSize, compressedSize, duration, ip);
 
         compressedFiles.push(outputPath);
       }
@@ -90,4 +107,3 @@ export const compress = async (req: Request, res: Response) => {
     res.status(500).send("Image compression failed.");
   }
 };
-

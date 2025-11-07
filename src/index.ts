@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import compressRoutes from "./routes/compressRoute";
 import { errorHandler } from "./middlewares/errorHandler";
+import "./database/init";
 
 const PORT = process.env.PORT || 3000;
 
