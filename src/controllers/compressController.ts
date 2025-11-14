@@ -16,6 +16,8 @@ export const compress = async (req: Request, res: Response) => {
 
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
   
+
+  const quality = Number(req.query.quality ?? 70);
    
   const compressedFiles: string[] = [];
   const uploadedFiles: string[] = [];
@@ -33,9 +35,9 @@ export const compress = async (req: Request, res: Response) => {
 
         const outputPath = path.join(outputDir, `compressed-${file.filename}`);
         await sharp(file.path)
-          .jpeg({ quality: 70 })
-          .png({ quality: 70 })
-          .webp({ quality: 70 })
+          .jpeg({ quality })
+          .png({ quality })
+          .webp({ quality })
           .toFile(outputPath);
 
         const compressedSize = fs.statSync(outputPath).size;

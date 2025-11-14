@@ -3,10 +3,13 @@ import { compress } from "../controllers/compressController";
 
 import { uploadImages } from "../middlewares/multerConfig";
 import db from "../database/db";
+import { convert } from "../controllers/convertController";
 
 const router = express.Router();
 
 router.post("/compress", uploadImages, compress);
+
+router.post("/convert", uploadImages, convert)
 
 router.get("/logs", (req, res) => {
   db.all(
