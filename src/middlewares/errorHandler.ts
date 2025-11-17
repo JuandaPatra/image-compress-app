@@ -8,13 +8,13 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err.message === "Only image files are allowed!") {
-    return res.status(400).json({ error: err.message });
+    return res.error(err.message, 400);
   }
 
   if (err instanceof multer.MulterError) {
-    return res.status(400).json({ error: err.message });
+    return res.error(err.message, 400);
   }
 
   console.error(err);
-  res.status(500).json({ error: "Internal server error" });
+  res.error("Internal Server Error", 500);
 };
