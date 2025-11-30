@@ -4,13 +4,11 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "src",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "typeRoots": ["./src/types", "./node_modules/@types"]
+    "types": ["node"]
   },
-  "include": ["api/**/*.ts", "src/**/*.ts"],
-  "exclude": ["src/index.local.ts"]
+  "include": ["src/**/*.ts"]
 }
