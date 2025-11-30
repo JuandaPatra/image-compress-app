@@ -36,3 +36,19 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/image-compress-app:${{ github.sha }}
+
+      # 5️⃣ Discord Notification (sukses)
+      - name: Send success notification to Discord
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"✅ **Build Success!**\nRepo: [${{ github.repository }}](https://github.com/${{ github.repository }})\nBranch: \`${{ github.ref_name }}\`\nCommit: \`${{ github.sha }}\`\n🛳️ Docker Image pushed to Docker Hub.\"}" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      # 6️⃣ Discord Notification (gagal)
+      - name: Send failure notification to Discord
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"❌ **Build Failed!**\nRepo: [${{ github.repository }}](https://github.com/${{ github.repository }})\nBranch: \`${{ github.ref_name }}\`\nCommit: \`${{ github.sha }}\`\nCheck logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}

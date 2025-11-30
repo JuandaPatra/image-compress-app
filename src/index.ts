@@ -1,9 +1,9 @@
-import express, { Request, Response } from "express";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-import sharp from "sharp";
+import express from "express";
 import cors from "cors";
+import compressRoutes from "./routes/compressRoute";
+import { errorHandler } from "./middlewares/errorHandler";
+import "./database/init";
+import { responseMiddleware } from "./middlewares/responseMiddleware";
 
 const PORT = process.env.PORT || 3000;
 
@@ -71,5 +71,5 @@ app.post("/compress", upload.single("image"), async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}  `);
 });

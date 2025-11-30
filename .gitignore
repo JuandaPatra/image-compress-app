@@ -1,2 +1,6 @@
 /node_modules
 /uploads
+/database
+/src/uploads/*
+/src/converted/*
+/src/compressed/*

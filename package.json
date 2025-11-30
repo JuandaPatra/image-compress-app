@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "test": "jest",
+    "dev": "vercel dev",
+    "devlocal": "nodemon --exec ts-node src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc"
   },
@@ -12,17 +13,26 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "archiver": "^7.0.1",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "multer": "^2.0.2",
-    "sharp": "^0.34.4"
+    "serverless-http": "^4.0.0",
+    "sharp": "^0.34.4",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "@types/archiver": "^7.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
+    "@types/jest": "^30.0.0",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.9.2",
+    "@types/sqlite3": "^3.1.11",
     "cors": "^2.8.5",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.10",
+    "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
