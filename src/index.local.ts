@@ -4,6 +4,10 @@ import compressRoutes from "./routes/compressRoute";
 import { errorHandler } from "./middlewares/errorHandler";
 import "./database/init";
 import { responseMiddleware } from "./middlewares/responseMiddleware";
+import path from "path";
+import fs from "fs";
+import multer from "multer";
+import sharp from "sharp";
 
 const PORT = process.env.PORT || 3000;
 
