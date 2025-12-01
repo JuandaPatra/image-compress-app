@@ -46,6 +46,9 @@ const upload = multer({
   },
 });
 
+app.post("/console", (req,res)=>{
+  return '<h1>ini console.</h1>'
+})
 app.post("/compress", upload.single("image"), async (req, res) => {
   if (!req.file) return res.status(400).send("No image uploaded");
 
