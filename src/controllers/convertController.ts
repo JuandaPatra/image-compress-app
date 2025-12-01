@@ -13,11 +13,9 @@ export const convert = async (req: Request, res: Response) => {
 
   const toFormat = (req.query.to as string)?.toLowerCase();
   const compressedFiles: string[] = [];
-
-  if (!toFormat || !["jpg", "png", "webp"].includes(toFormat)) {
-    return res.status(400).json({
-      error: "Invalid target format. Use ?to=jpg|png|webp",
-    });
+  
+  if (!toFormat || !["jpg", "png", "webp", "jpeg"].includes(toFormat)) {
+    return res.error("Invalid target format. Use ?to=jpg|png|webp", 400);
   }
 
   try {
