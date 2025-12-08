@@ -1,17 +1,17 @@
-import express from "express";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import multer from "multer";
 import sharp from "sharp";
-import cors from "cors";
 import path from "path";
 import fs from "fs";
 
-const serverless = require("serverless-http");
-const app = express();
+// Disable default body parser (Wajib untuk multer)
+export const config = {
+  api: {
+    bodyParser: false
+  }
+};
 
-// allow CORS
-app.use(cors({ origin: "*" }));
-
-// Vercel hanya boleh tulis di /tmp
+// hanya boleh tulis di /tmp
 const uploadDir = "/tmp/uploads";
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -25,26 +25,32 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.post("/compress", upload.single("image"), async (req, res) => {
-  try {
-    if (!req.file) return res.status(400).send("No image uploaded");
-
-    const input = req.file.path;
-    const output = path.join(uploadDir, "compressed-" + req.file.filename);
-
-    await sharp(input)
-      .jpeg({ quality: 70 })
-      .toFile(output);
-
-    // download ke client
-    res.download(output, "compressed-" + req.file.originalname, () => {
-      fs.unlinkSync(input);
-      fs.unlinkSync(output);
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Compression failed");
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
-});
 
-export default app
+  upload.single("image")(req as any, res as any, async (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    try {
+      if (!req.file) return res.status(400).json({ error: "No image uploaded" });
+
+      const input = (req as any).file.path;
+      const output = path.join(uploadDir, "compressed-" + (req as any).file.filename);
+
+      await sharp(input)
+        .jpeg({ quality: 70 })
+        .toFile(output);
+
+      res.download(output, "compressed.jpg", () => {
+        fs.unlinkSync(input);
+        fs.unlinkSync(output);
+      });
+
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: "Compression failed" });
+    }
+  });
+}
