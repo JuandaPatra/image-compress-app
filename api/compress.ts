@@ -47,4 +47,4 @@ app.post("/compress", upload.single("image"), async (req, res) => {
   }
 });
 
-module.exports = serverless(app);
+export default app
