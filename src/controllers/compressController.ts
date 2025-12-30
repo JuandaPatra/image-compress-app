@@ -54,12 +54,12 @@ export const compress = async (req: Request, res: Response) => {
       }
     }
 
-    const cleanUp = () => {
-      // Hapus file upload original
-      cleanUpUtils(uploadedFiles);
-      // Hapus file compressed
-      cleanUpUtils(compressedFiles);
-    };
+    // const cleanUp = () => {
+    //   // Hapus file upload original
+    //   cleanUpUtils(uploadedFiles);
+    //   // Hapus file compressed
+    //   cleanUpUtils(compressedFiles);
+    // };
 
     // Jika hanya satu file
     if (compressedFiles.length === 1) {
@@ -73,7 +73,7 @@ export const compress = async (req: Request, res: Response) => {
       stream.pipe(res);
 
       // Hapus file setelah response selesai
-      res.on("finish", cleanUp);
+      // res.on("finish", cleanUp);
 
       return;
     }
@@ -101,7 +101,7 @@ export const compress = async (req: Request, res: Response) => {
       // Hapus semua file setelah zip dikirim
       res.on("finish", () => {
         fs.existsSync(zipPath) && fs.unlinkSync(zipPath);
-        cleanUp();
+        // cleanUp();
       });
     });
   } catch (error) {
